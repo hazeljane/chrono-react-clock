@@ -42,6 +42,22 @@
   --line: #dfe4ed;
   --shadow: 0 22px 70px rgba(37, 50, 72, .1);
 }
+:root,
+:root[data-theme="caramel"] {
+  --accent-color: #d6a56c;
+}
+
+:root[data-theme="ocean"] {
+  --accent-color: #60a5fa;
+}
+
+:root[data-theme="violet"] {
+  --accent-color: #a78bfa;
+}
+
+:root[data-theme="emerald"] {
+  --accent-color: #34d399;
+}
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--page); color: var(--text); transition: background .25s, color .25s; }
 button, input, select { font: inherit; }
