@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BellRing, Music2, Play, Square, Volume2, Clock3 } from "lucide-react";
-
+import CustomDropdown from "./CustomDropdown.jsx";
 const melodies = {
   gentle: [523.25, 659.25, 783.99, 659.25],
   classic: [880, 0, 880, 0, 698.46, 0, 880, 0],
@@ -135,11 +135,31 @@ export default function Alarm({ onAlarmLabelChange }) {
         <input id="alarmTime" type="time" value={alarmTime} onChange={(e) => setAlarmTime(e.target.value)} required />
 
         <label htmlFor="alarmSound">Alarm sound</label>
-        <select id="alarmSound" value={sound} onChange={(e) => setSound(e.target.value)}>
-          <option value="gentle">Gentle melody</option>
-          <option value="classic">Classic alarm</option>
-          <option value="bells">Soft bells</option>
-        </select>
+        <CustomDropdown
+  label="Alarm sound"
+  value={sound}
+  onChange={setSound}
+  options={[
+    {
+      value: "gentle",
+      label: "Gentle melody",
+      description: "A calm and relaxing wake-up sound",
+      color: "#D6A56C",
+    },
+    {
+      value: "classic",
+      label: "Classic alarm",
+      description: "A traditional, attention-grabbing alarm",
+      color: "#60A5FA",
+    },
+    {
+      value: "bells",
+      label: "Soft bells",
+      description: "A light and soothing bell sound",
+      color: "#34D399",
+    },
+  ]}
+/>
 
         <label className="switch-row" htmlFor="alarmRepeat">
           <span>Repeat every day</span>

@@ -18,44 +18,71 @@
   --line: #e7d2ba;
   --shadow: 0 22px 70px rgba(91, 56, 37, .12);
 }
-:root[data-theme="dark"] {
-  --page: #211b18;
-  --surface: rgba(49, 39, 33, .94);
-  --surface-solid: #352a23;
-  --surface-soft: #403127;
-  --text: #fff1e3;
-  --muted: #c2a58d;
-  --accent: #d6a77d;
-  --accent-hover: #e7bd96;
-  --line: #5a4537;
-  --shadow: 0 22px 70px rgba(0, 0, 0, .3);
-}
-:root[data-theme="light"] {
-  --page: #f7f8fb;
-  --surface: rgba(255, 255, 255, .92);
-  --surface-solid: #fff;
-  --surface-soft: #f1f3f7;
-  --text: #263247;
-  --muted: #6d788b;
-  --accent: #4b5e85;
-  --accent-hover: #37496f;
-  --line: #dfe4ed;
-  --shadow: 0 22px 70px rgba(37, 50, 72, .1);
-}
 
+/* ================================
+   DEFAULT THEME: CARAMEL
+================================ */
 :root,
 :root[data-theme="caramel"] {
+  color-scheme: light;
+
   --page: #f5e5d4;
   --surface: rgba(255, 250, 244, 0.94);
   --surface-solid: #fffaf4;
   --surface-soft: #f0dfcd;
+
   --text: #38271d;
   --muted: #8c7361;
+
   --accent: #b87543;
   --accent-hover: #995b31;
+
   --line: #e1c8b0;
   --shadow: 0 22px 70px rgba(72, 43, 25, 0.12);
 }
+
+/* ================================
+   DARK THEME
+================================ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page: #211b18;
+  --surface: rgba(49, 39, 33, 0.94);
+  --surface-solid: #352a23;
+  --surface-soft: #403127;
+
+  --text: #fff1e3;
+  --muted: #c2a58d;
+
+  --accent: #d6a77d;
+  --accent-hover: #e7bd96;
+
+  --line: #5a4537;
+  --shadow: 0 22px 70px rgba(0, 0, 0, 0.3);
+}
+
+/* ================================
+   LIGHT THEME
+================================ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --page: #f7f8fb;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-solid: #ffffff;
+  --surface-soft: #f1f3f7;
+
+  --text: #263247;
+  --muted: #6d788b;
+
+  --accent: #4b5e85;
+  --accent-hover: #37496f;
+
+  --line: #dfe4ed;
+  --shadow: 0 22px 70px rgba(37, 50, 72, 0.1);
+}
+
 
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--page); color: var(--text); transition: background .25s, color .25s; }
@@ -141,7 +168,46 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .lap-total { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 .alarm-form { display: grid; gap: 10px; }
 .alarm-form > label:not(.switch-row), .setting-group > label:not(.switch-row), .group-label { margin-top: 8px; color: var(--muted); font-size: .84rem; font-weight: 700; }
-.alarm-form input[type="time"], .alarm-form select, .setting-group select { width: 100%; min-height: 45px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-solid); color: var(--text); }
+
+/* Alarm form and settings controls */
+.alarm-form input[type="time"],
+.setting-group select {
+  width: 100%;
+  min-height: 45px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-solid);
+  color: var(--text);
+  font: inherit;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/* Focus state */
+.alarm-form input[type="time"]:focus-visible,
+.setting-group select:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* Custom alarm dropdown */
+.alarm-form .custom-dropdown {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .alarm-form input[type="time"],
+  .setting-group select {
+    transition: none;
+  }
+}
+
 .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 11px 0; color: var(--text); font-size: .9rem; }
 input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
 .alarm-status { margin: 17px 0; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-solid); color: var(--muted); font-size: .85rem; }
