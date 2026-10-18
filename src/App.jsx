@@ -77,7 +77,12 @@ export default function App() {
             </>
           )}
           {activeSection === "stopwatch" && <Stopwatch />}
-          {activeSection === "alarm" && <Alarm onAlarmLabelChange={setAlarmLabel} />}
+          {activeSection === "alarm" && (
+  <Alarm
+    settings={settings}
+    onAlarmLabelChange={setAlarmLabel}
+  />
+)}
         </div>
 
         <footer className="app-footer">Made for your time <Heart size={14} fill="currentColor" /></footer>

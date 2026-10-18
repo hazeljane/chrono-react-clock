@@ -6,8 +6,21 @@ const melodies = {
   classic: [880, 0, 880, 0, 698.46, 0, 880, 0],
   bells: [659.25, 783.99, 987.77, 783.99],
 };
+function formatAlarmTime(time, timeFormat = "12") {
+  if (!time) return "";
 
-export default function Alarm({ onAlarmLabelChange }) {
+  const [hours, minutes] = time.split(":").map(Number);
+  const date = new Date();
+
+  date.setHours(hours, minutes, 0, 0);
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: timeFormat === "12",
+  });
+}
+export default function Alarm({ settings,onAlarmLabelChange }) {
   const [alarmTime, setAlarmTime] = useState("");
   const [sound, setSound] = useState("gentle");
   const [repeat, setRepeat] = useState(false);
@@ -91,28 +104,50 @@ export default function Alarm({ onAlarmLabelChange }) {
     };
   }, [musicPlaying, sound, volume]);
 
-  function setAlarm(event) {
-    event.preventDefault();
-    if (!alarmTime) return;
-    const [hours, minutes] = alarmTime.split(":").map(Number);
-    const now = new Date();
-    const target = new Date(now);
-    target.setHours(hours, minutes, 0, 0);
-    if (target.getTime() <= now.getTime()) target.setDate(target.getDate() + 1);
-    setAlarmTarget(target.getTime());
-    firedTarget.current = null;
-    setRinging(false);
-    ringingRef.current = false;
-    setStatus(`Set for ${alarmTime}${repeat ? " · repeats daily" : ""}`);
-    onAlarmLabelChange?.(alarmTime);
+
+function setAlarm(event) {
+  event.preventDefault();
+
+  if (!alarmTime) return;
+
+  const [hours, minutes] = alarmTime.split(":").map(Number);
+  const now = new Date();
+  const target = new Date(now);
+
+  target.setHours(hours, minutes, 0, 0);
+
+  if (target.getTime() <= now.getTime()) {
+    target.setDate(target.getDate() + 1);
   }
+
+  const formattedTime = formatAlarmTime(
+    alarmTime,
+    settings?.timeFormat ?? "12"
+  );
+
+  setAlarmTarget(target.getTime());
+  firedTarget.current = null;
+  setRinging(false);
+  ringingRef.current = false;
+
+  setStatus(
+    `Set for ${formattedTime}${repeat ? " · repeats daily" : ""}`
+  );
+
+  onAlarmLabelChange?.(formattedTime);
+}
+
 
   function stopAlarm() {
     ringingRef.current = false;
     setRinging(false);
     window.clearInterval(loopRef.current);
     setStatus(alarmTarget ? `Next alarm is scheduled` : "Alarm stopped");
-    onAlarmLabelChange?.(alarmTarget ? alarmTime : "Ready");
+    onAlarmLabelChange?.(
+  alarmTarget
+    ? formatAlarmTime(alarmTime, settings?.timeFormat ?? "12")
+    : "Ready"
+);
   }
 
   function snooze() {
@@ -131,10 +166,24 @@ export default function Alarm({ onAlarmLabelChange }) {
       </div>
 
       <form className="alarm-form" onSubmit={setAlarm}>
-        <label htmlFor="alarmTime">Alarm time</label>
-        <input id="alarmTime" type="time" value={alarmTime} onChange={(e) => setAlarmTime(e.target.value)} required />
+        
+<label htmlFor="alarmTime">Alarm time</label>
 
-        <label htmlFor="alarmSound">Alarm sound</label>
+<input
+  id="alarmTime"
+  type="time"
+  value={alarmTime}
+  onChange={(event) => setAlarmTime(event.target.value)}
+  required
+/>
+
+{alarmTime && (
+  <p className="alarm-time-preview">
+    Selected time:{" "}
+    {formatAlarmTime(alarmTime, settings?.timeFormat ?? "12")}
+  </p>
+)}
+
         <CustomDropdown
   label="Alarm sound"
   value={sound}
@@ -161,10 +210,26 @@ export default function Alarm({ onAlarmLabelChange }) {
   ]}
 />
 
-        <label className="switch-row" htmlFor="alarmRepeat">
-          <span>Repeat every day</span>
-          <input id="alarmRepeat" type="checkbox" checked={repeat} onChange={(e) => setRepeat(e.target.checked)} />
-        </label>
+       
+<label className="switch-row" htmlFor="alarmRepeat">
+  <span className="switch-label">
+    <strong>Repeat every day</strong>
+    <small>Automatically repeat the alarm daily</small>
+  </span>
+
+  <input
+    className="toggle-input"
+    id="alarmRepeat"
+    type="checkbox"
+    checked={repeat}
+    onChange={(event) => setRepeat(event.target.checked)}
+  />
+
+  <span className="toggle-track" aria-hidden="true">
+    <span className="toggle-thumb" />
+  </span>
+</label>
+
 
         <button className="primary-button full-button" type="submit"><Clock3 size={17} /> Set alarm</button>
       </form>

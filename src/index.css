@@ -167,7 +167,35 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .lap-list strong { text-align: center; font-variant-numeric: tabular-nums; }
 .lap-total { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 .alarm-form { display: grid; gap: 10px; }
-.alarm-form > label:not(.switch-row), .setting-group > label:not(.switch-row), .group-label { margin-top: 8px; color: var(--muted); font-size: .84rem; font-weight: 700; }
+
+/* Daily repeat setting */
+.alarm-form .switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 0;
+  cursor: pointer;
+}
+
+.switch-label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.switch-label strong {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.switch-label small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
 
 /* Alarm form and settings controls */
 .alarm-form input[type="time"],
@@ -310,6 +338,13 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   .toggle-thumb {
     transition: none;
   }
+}
+
+.alarm-time-preview {
+  margin-top: -6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
