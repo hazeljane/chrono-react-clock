@@ -125,50 +125,54 @@ export default function SettingsPanel({
             ["showMinute", "Minute hand"],
             ["showSecond", "Second hand"],
           ].map(([key, label]) => (
-            <label
-              className="switch-row"
-              key={key}
-              htmlFor={key}
-            >
-              <span>{label}</span>
+            
+<label className="switch-row" key={key} htmlFor={key}>
+  <span>{label}</span>
 
-              <input
-                id={key}
-                type="checkbox"
-                checked={settings[key]}
-                onChange={(event) =>
-                  update(key, event.target.checked)
-                }
-              />
-            </label>
+  <input
+    className="toggle-input"
+    id={key}
+    type="checkbox"
+    checked={settings[key]}
+    onChange={(e) => update(key, e.target.checked)}
+  />
+
+  <span className="toggle-track" aria-hidden="true">
+    <span className="toggle-thumb" />
+  </span>
+</label>
+
           ))}
         </div>
 
         {/* Other clock options */}
-        <div className="setting-group">
-          {[
-            ["showDigital", "Digital time"],
-            ["showDate", "Date"],
-            ["showNumbers", "Clock numbers"],
-          ].map(([key, label]) => (
-            <label
-              className="switch-row"
-              key={key}
-              htmlFor={key}
-            >
-              <span>{label}</span>
+       <div className="setting-group">
+  <p className="group-label">Display options</p>
 
-              <input
-                id={key}
-                type="checkbox"
-                checked={settings[key]}
-                onChange={(event) =>
-                  update(key, event.target.checked)
-                }
-              />
-            </label>
-          ))}
-        </div>
+  {[
+    ["showDigital", "Digital time"],
+    ["showDate", "Date"],
+    ["showNumbers", "Clock numbers"],
+  ].map(([key, label]) => (
+    <label className="switch-row" key={key} htmlFor={key}>
+      <span>{label}</span>
+
+      <input
+        className="toggle-input"
+        id={key}
+        type="checkbox"
+        checked={settings[key]}
+        onChange={(event) =>
+          update(key, event.target.checked)
+        }
+      />
+
+      <span className="toggle-track" aria-hidden="true">
+        <span className="toggle-thumb" />
+      </span>
+    </label>
+  ))}
+</div>
 
         {/* Panel actions */}
         <div className="panel-actions">
